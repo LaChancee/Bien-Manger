@@ -3,15 +3,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-require('dotenv').config();
+require("dotenv").config();
+const cors_1 = __importDefault(require("cors"));
 const express_1 = __importDefault(require("express"));
+const jwt_1 = require("./authentification/jwt");
 const constants_1 = require("./config/constants");
 const Recipe_1 = require("./routes/Recipe");
 const app = (0, express_1.default)();
+const allowedOrigins = ["http://localhost:8000"];
+const options = {
+    origin: allowedOrigins,
+};
+app.use((0, cors_1.default)());
 app.use(express_1.default.json());
-//Les routes    
-app.get('/recipe/show/:id', Recipe_1.router);
-app.get("/", (req, res) => res.send('Hello world'));
+//Les routes
+app.get("/recipe/show/:id", Recipe_1.router);
+app.get("/", (req, res) => res.send("Hello world"));
 app.listen(constants_1.PORT, () => {
     console.log(`Server is listening on port ${constants_1.PORT}`);
 });
+if (process.env.NODE_ENV !== "production") {
+    console.log(`Le token JWT:`, (0, jwt_1.generateToken)());
+}
