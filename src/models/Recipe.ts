@@ -1,6 +1,7 @@
 import { Model, DataTypes } from "sequelize";
 import { sequelize } from "../database/database";
 import { Course } from "./Course";
+import { User } from "./User";
 
 export class Recipe extends Model {
   public id!: number;
@@ -9,6 +10,7 @@ export class Recipe extends Model {
   public description!: string;
   public guests!: number;
   public idCourse!: number;
+  public idUser!: number;
   public created_At!: Date;
   public updated_At!: Date;
 }
@@ -22,9 +24,7 @@ Recipe.init(
     },
     name: {
       type: DataTypes.STRING,
-      validate: {
-        isAlpha: true,
-      },
+      
       allowNull: false,
     },
     slug: {
@@ -48,6 +48,15 @@ Recipe.init(
         key: "id",
       },
     },
+    idUser: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: User,
+        key: "id",
+      },
+    },
+  
   },
   {
     sequelize,
@@ -58,4 +67,6 @@ Recipe.init(
 );
 
 Recipe.belongsTo(Course, { foreignKey: "idCourse" });
+Recipe.belongsTo(User, { foreignKey: "idUser" });
 Course.hasOne(Recipe, { foreignKey: "idCourse" });
+User.hasOne(Recipe, { foreignKey: "idUser" });

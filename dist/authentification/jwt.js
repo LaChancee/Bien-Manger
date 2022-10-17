@@ -48,7 +48,7 @@ function generateToken() {
     };
     // generation du token JWT
     // Note: la passphrase devrait être dans le .env
-    return (0, jsonwebtoken_1.sign)(payload, { key: privateKey, passphrase: "Macaron" }, signInOptions);
+    return (0, jsonwebtoken_1.sign)(payload, { key: privateKey, passphrase: "Test" }, signInOptions);
 }
 exports.generateToken = generateToken;
 /**

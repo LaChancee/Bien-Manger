@@ -6,6 +6,7 @@ import express from "express";
 import { generateToken } from "./authentification/jwt";
 import { PORT } from "./config/constants";
 import { router } from "./routes/Recipe";
+import { route } from "./routes/User";
 
 const app = express();
 const allowedOrigins = ["http://localhost:8000"];
@@ -17,6 +18,10 @@ app.use(express.json());
 
 //Les routes
 app.get("/recipe/show/:id", router);
+app.post("/recipe/add", router);
+app.put("/recipe/update/:id", router);
+// users routes
+app.post('/user/add', route);
 
 app.get("/", (req, res) => res.send("Hello world"));
 

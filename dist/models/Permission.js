@@ -13,12 +13,12 @@ Permission.init({
         autoIncrement: true,
         primaryKey: true
     },
-    menu: {
+    role: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: true
+        allowNull: false
     },
 }, {
     sequelize: database_1.sequelize,
-    tableName: "courses",
+    tableName: "permissions",
     timestamps: false
 });

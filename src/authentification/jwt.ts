@@ -35,7 +35,7 @@ export function generateToken() {
   // Note: la passphrase devrait être dans le .env
   return sign(
     payload,
-    { key: privateKey, passphrase: "Macaron" },
+    { key: privateKey, passphrase: "Test" },
     signInOptions
   );
 }

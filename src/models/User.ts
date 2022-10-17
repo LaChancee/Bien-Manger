@@ -39,7 +39,7 @@ User.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
-    idpermission: {
+    idPermission: {
       type: DataTypes.INTEGER,
       allowNull: false,
       references: {
@@ -50,10 +50,11 @@ User.init(
   },
   {
     sequelize,
-    tableName: "recipes",
+    tableName: "users",
+    timestamps: false,
   
   }
 );
 
 User.belongsTo(Permission, { foreignKey: "idPermission" });
-User.hasOne(Permission, { foreignKey: "idPermission" });
+Permission.hasOne(User, { foreignKey: "idPermission" });

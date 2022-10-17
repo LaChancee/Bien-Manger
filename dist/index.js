@@ -9,6 +9,7 @@ const express_1 = __importDefault(require("express"));
 const jwt_1 = require("./authentification/jwt");
 const constants_1 = require("./config/constants");
 const Recipe_1 = require("./routes/Recipe");
+const User_1 = require("./routes/User");
 const app = (0, express_1.default)();
 const allowedOrigins = ["http://localhost:8000"];
 const options = {
@@ -18,6 +19,10 @@ app.use((0, cors_1.default)());
 app.use(express_1.default.json());
 //Les routes
 app.get("/recipe/show/:id", Recipe_1.router);
+app.post("/recipe/add", Recipe_1.router);
+app.put("/recipe/update/:id", Recipe_1.router);
+// users routes
+app.post('/user/add', User_1.route);
 app.get("/", (req, res) => res.send("Hello world"));
 app.listen(constants_1.PORT, () => {
     console.log(`Server is listening on port ${constants_1.PORT}`);
