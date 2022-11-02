@@ -1,27 +1,29 @@
 import {Model, DataTypes} from 'sequelize'
 import { UserController } from '../controllers/UserController';
 import { sequelize } from "../database/database"
-import { User } from './User';
 
-export class Permission extends Model
+export class Ingredient extends Model
 {
-    public id!: number;
-    public role!: string;
+    declare id: number;
+    declare role: string;
 }
 
-Permission.init({
+Ingredient.init({
     id: {
         type: DataTypes.INTEGER,
         autoIncrement: true,
         primaryKey: true
     },
-    role: {
+    name: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        validate:{
+            max: 100,
+        }
     },
 },
 {
     sequelize,
-    tableName: "permissions",
+    tableName: "ingredients",
     timestamps: false
 });

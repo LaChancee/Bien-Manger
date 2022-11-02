@@ -8,50 +8,70 @@ import { generateToken } from "../authentification/jwt";
 import { BCRYPT_ROUND } from "../config/constants";
 import { sequelize } from "../database/database";
 import { User } from "../models/User";
+
 import { CrudController } from "./CrudController";
 import { UserController } from "./UserController";
 import { status } from "http-status";
+import { Permission } from "../models/Permission";
+import { hashSync } from "bcrypt";
 
 export class AuthenticateController extends CrudController {
-
   public async login(req: Request, res: Response): Promise<any> {
-    const mail = req.body.mail;
+    //   const mail = req.body.mail;
+    //   consthashSyncplainPassword = req.body.password;
+    //   const user = await User.findOne({
+    //     where: { mail: mail }, include: [Permission]
+    //   });
+    //   // const user = await User.findOne({
+    //   //   attributes: ['id', 'lastname', ['role', 'idPermission']],
+    //   //   where: { mail:mail },
+    //   //   include: [{
+    //   //     model: Permission
+    //   //   }]
+    //   // });
     const plainPassword = req.body.password;
-    const user = await User.findOne({ where: { mail:mail } });
-    
-    if (user!) {
-      res.status(status.UNAUTHORIZED).json({ message  : "Invalid credential" }); 
-      return; 
+    const mail = req.body.mail;
+
+    const user = await User.findOne({
+          where: { mail: mail }, include: Permission
+        });
+    if (user === null) {
+      res.json("login invalide");
+      return;
     }
-    const bMacth = await compare(plainPassword, user!.password);
-    if (!bMacth) {
-      res.status(status.UNAUTHORIZED).json({ message  : "Invalid credential" });
+
+    // const bMatch = await compare(plainPassword, user!.password);
+    // if (!bMatch) {
+    //   res.json("login invalide");
+    //   return;
+    // }
+
+     const permissions = await Permission.findByPk(user.idPermission);
+    if (permissions === null) {
+      res.status(status.UNAUTHORIZED).json("invalid credantials");
+      return;
+    }
+
+    res.json({
+      token: generateToken(user.lastname, user.mail, permissions.role),
+    });
   }
 
-  res.status(status.OK).json({'token' : generateToken()});
-}
   /**
    * signin
    */
-  public signin(req: Request, res: Response): void {
+  public async signin(req: Request, res: Response): Promise<void> {
     let userInfo = req.body;
-    hash(userInfo.password, BCRYPT_ROUND)
-      .then((hashedPassword) => {
-        userInfo.password = hashedPassword;
-        User.create(userInfo)
-          .then((user) => {
-            let name = user.lastname;
-            let msg = "L'utilisateur " + name + " a bien été ajouté.";
-            res.json({ message: msg });
-          })
-          .catch((err) => {
-            console.log(err);
-            res.json({ message: "Insertion impossible." });
-          });
+    userInfo.password = await hash(userInfo.password, BCRYPT_ROUND);
+    User.create(req.body)
+      .then((user) => {
+        let name = user.lastname;
+        let msg = "l'utilisateur  " + name + " a été ajouté";
+        res.json({ "message ": msg });
       })
       .catch((err) => {
         console.log(err);
-        res.json({ message: "Insertion impossible." });
+        res.json({ message: "insertion impossible" });
       });
   }
 

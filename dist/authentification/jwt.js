@@ -30,25 +30,28 @@ const path = __importStar(require("path"));
 /**
  * création du token JWT
  */
-function generateToken() {
+function generateToken(userName, mail, role) {
     // Les informations que l'on souhaite enregistrer dans le token
     const payload = {
-        name: "partenaire1",
-        userId: 123,
+        name: userName,
+        mail: mail,
+        //  userId: 123,
         // Les accès à l'API que l'on souhaite ouvrir à ce partenaire
-        accessTypes: ["getRecipeList", "showRecipe", "updateRecipe", "addRecipe"],
+        accessTypes: [
+            role
+        ]
     };
     // Lecture du fichier private.key permettant de crypter le JWT
-    const privateKey = fs.readFileSync(path.join(__dirname, "./../../private.key"));
+    const privateKey = fs.readFileSync(path.join(__dirname, './../../private.key'));
     const signInOptions = {
         // RS256 utilises une paire de clé public/privée key.
-        algorithm: "RS256",
+        algorithm: 'RS256',
         // Durée de validité du token
-        expiresIn: "10h",
+        expiresIn: '10h'
     };
     // generation du token JWT
     // Note: la passphrase devrait être dans le .env
-    return (0, jsonwebtoken_1.sign)(payload, { key: privateKey, passphrase: "Test" }, signInOptions);
+    return (0, jsonwebtoken_1.sign)(payload, { key: privateKey, passphrase: 'Test' }, signInOptions);
 }
 exports.generateToken = generateToken;
 /**
@@ -58,10 +61,10 @@ exports.generateToken = generateToken;
  * @return Promise<TokenPayload> Une promesse contenant les éléments utiles (le payload) contenu dans le token
  */
 function validateToken(token) {
-    const publicKey = fs.readFileSync(path.join(__dirname, "./../../public.key"));
+    const publicKey = fs.readFileSync(path.join(__dirname, './../../public.key'));
     return new Promise(function (resolve, reject) {
         (0, jsonwebtoken_1.verify)(token, publicKey, (error, decoded) => {
-            console.log("decode", decoded);
+            console.log('decode', decoded);
             if (error) {
                 return reject(error);
             }

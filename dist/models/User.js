@@ -32,7 +32,7 @@ User.init({
         type: sequelize_1.DataTypes.STRING,
         allowNull: false,
         validate: {
-            is: /^[0-9a-f]{64}$/i,
+        // is: /^[0-9a-f]{64}$/i,
         },
     },
     idPermission: {

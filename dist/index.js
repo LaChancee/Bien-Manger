@@ -11,6 +11,7 @@ const constants_1 = require("./config/constants");
 const Recipe_1 = require("./routes/Recipe");
 const User_1 = require("./routes/User");
 const AuthenticateRouter_1 = require("./routes/AuthenticateRouter");
+const IngredientRouter_1 = require("./routes/IngredientRouter");
 const app = (0, express_1.default)();
 const allowedOrigins = ["http://localhost:8000"];
 const options = {
@@ -26,10 +27,12 @@ app.put("/recipe/update/:id", Recipe_1.router);
 app.post("/user/add", User_1.userRoute);
 app.post("/signin", AuthenticateRouter_1.authenticateRouter);
 app.post("/login", AuthenticateRouter_1.authenticateRouter);
+// Les ingrédients 
+app.get("/ingredient/show/:id", IngredientRouter_1.ingredientRouter);
 app.get("/", (req, res) => res.send("Hello world"));
 app.listen(constants_1.PORT, () => {
     console.log(`Server is listening on port ${constants_1.PORT}`);
 });
 if (process.env.NODE_ENV !== "production") {
-    console.log(`Le token JWT:`, (0, jwt_1.generateToken)());
+    console.log(`Le token JWT:`, (0, jwt_1.generateToken)("miharisoa", "miharisoababef@gmail.com", "administrateur"));
 }

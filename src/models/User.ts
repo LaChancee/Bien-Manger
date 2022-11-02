@@ -3,12 +3,12 @@ import { sequelize } from "../database/database";
 import { Permission } from "./Permission";
 
 export class User extends Model {
-  public id!: number;
-  public lastname!: string;
-  public firstname?: string;
-  public mail!: string;
-  public password!: string;
-  public idPermission!: number;
+  declare id: number;
+  declare lastname: string;
+  declare firstname: string;
+  declare mail: string;
+  declare password: string;
+  declare idPermission: number;
 }
 
 User.init(
@@ -37,7 +37,7 @@ User.init(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        is: /^[0-9a-f]{64}$/i,
+        // is: /^[0-9a-f]{64}$/i,
       },
     },
     idPermission: {
@@ -58,3 +58,6 @@ User.init(
 
 User.belongsTo(Permission, { foreignKey: "idPermission" });
 Permission.hasOne(User, { foreignKey: "idPermission" });
+
+
+
