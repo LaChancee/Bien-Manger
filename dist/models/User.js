@@ -30,7 +30,10 @@ User.init({
     },
     password: {
         type: sequelize_1.DataTypes.STRING,
-        allowNull: true,
+        allowNull: false,
+        validate: {
+            is: /^[0-9a-f]{64}$/i,
+        },
     },
     idPermission: {
         type: sequelize_1.DataTypes.INTEGER,

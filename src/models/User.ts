@@ -1,5 +1,5 @@
 import { Model, DataTypes } from "sequelize";
-import { sequelize } from "../database/database"
+import { sequelize } from "../database/database";
 import { Permission } from "./Permission";
 
 export class User extends Model {
@@ -7,9 +7,8 @@ export class User extends Model {
   public lastname!: string;
   public firstname?: string;
   public mail!: string;
-  public password?: string;
+  public password!: string;
   public idPermission!: number;
-  
 }
 
 User.init(
@@ -29,7 +28,6 @@ User.init(
     firstname: {
       type: DataTypes.STRING,
       allowNull: true,
-      
     },
     mail: {
       type: DataTypes.STRING,
@@ -37,7 +35,10 @@ User.init(
     },
     password: {
       type: DataTypes.STRING,
-      allowNull: true,
+      allowNull: false,
+      validate: {
+        is: /^[0-9a-f]{64}$/i,
+      },
     },
     idPermission: {
       type: DataTypes.INTEGER,
@@ -52,7 +53,6 @@ User.init(
     sequelize,
     tableName: "users",
     timestamps: false,
-  
   }
 );
 

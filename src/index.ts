@@ -6,7 +6,9 @@ import express from "express";
 import { generateToken } from "./authentification/jwt";
 import { PORT } from "./config/constants";
 import { router } from "./routes/Recipe";
-import { route } from "./routes/User";
+import { userRoute } from "./routes/User";
+import { authenticateRouter } from "./routes/AuthenticateRouter";
+
 
 const app = express();
 const allowedOrigins = ["http://localhost:8000"];
@@ -21,7 +23,9 @@ app.get("/recipe/show/:id", router);
 app.post("/recipe/add", router);
 app.put("/recipe/update/:id", router);
 // users routes
-app.post('/user/add', route);
+app.post("/user/add", userRoute);
+app.post("/signin", authenticateRouter);
+app.post("/login", authenticateRouter);
 
 app.get("/", (req, res) => res.send("Hello world"));
 
@@ -32,3 +36,4 @@ app.listen(PORT, () => {
 if (process.env.NODE_ENV !== "production") {
   console.log(`Le token JWT:`, generateToken());
 }
+
